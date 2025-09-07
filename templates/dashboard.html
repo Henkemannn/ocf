@@ -1,0 +1,69 @@
+    {% if s %}
+      <div class="alert alert-info text-center mb-2" style="font-size:0.95em;">
+        <b>Inställningar från adminpanelen:</b><br>
+        Startvecka: <span class="badge bg-primary">{{ s.menu_start_week }}</span>
+        Startmeny: <span class="badge bg-success">{{ s.menu_start_index }}</span>
+      </div>
+    {% endif %}
+{% extends "layout.html" %}
+{% block content %}
+<div class="container" style="max-width:700px;">
+  <h2 class="mb-4 text-center" style="font-weight:700; letter-spacing:0.5px;">Velkommen, {{ user.name }}!</h2>
+  {% if rig_name %}
+    <div class="text-center mb-2"><span class="badge bg-info">{{ rig_name }}</span></div>
+  {% endif %}
+  <form method="post" class="row g-2 align-items-end mb-4" style="max-width:400px;margin:auto;">
+    <div class="col-12">
+      <label for="arbetsperiod_start" class="form-label">Startdato for din arbeidsperiode</label>
+      <input type="date" class="form-control" name="arbetsperiod_start" id="arbetsperiod_start" value="{{ arbetsperiod_start or '' }}">
+      <div class="form-text">Du trenger bare å angi startdato, appen regner ut 2 uker automatisk.</div>
+    </div>
+    <div class="col-12 text-center mt-2">
+      <button type="submit" class="btn btn-primary px-4">Vis meny for perioden</button>
+    </div>
+  </form>
+  <h4 class="mb-3 text-center" style="font-weight:600;">Menykort for dagvakt (fredag–torsdag)</h4>
+  <!-- Debug block removed -->
+    {% if menu_days_period %}
+  {% set days = menu_days_period|map(attribute='date')|unique|list %}
+  {% set first_day = days[0] %}
+  {% set last_day = days[-1] %}
+      <div class="container-fluid">
+        <div class="row fw-bold mb-2" style="font-size:1.1em;">
+          <div class="col-6 text-center" style="color:#218838;">Lunsj</div>
+          <div class="col-6 text-center" style="color:#0056b3;">Middag</div>
+        </div>
+      </div>
+    {% else %}
+      <div class="alert alert-warning text-center p-4 mt-4 shadow-sm rounded">
+        <div style="font-size:1.2em;">Ingen meny funnet for denne perioden. Sjekk at menyen er importert og at startdato er riktig.</div>
+      </div>
+    {% endif %}
+  </div>
+
+<!-- TURNUS från nya motorn (Steg 7) -->
+<section>
+  <h2>Turnus ({{ week_start }} – {{ week_end }})</h2>
+  {% if not slots_by_day %}
+    <p>Inga publicerade pass för vald period.</p>
+  {% else %}
+    {% for day, items in slots_by_day|dictsort %}
+      <div class="turnus-day">
+        <h3>{{ day }}</h3>
+        <ul>
+          {% for s in items %}
+            <li>
+              <strong>{{ (s.role or 'pass')|capitalize }}</strong>
+              {{ s.start_ts[11:16] }}–{{ s.end_ts[11:16] }}
+              {% if s.user_name %} – {{ s.user_name }}{% endif %}
+              {% if s.status %} <em>({{ s.status }})</em>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% endif %}
+</section>
+<!-- /TURNUS -->
+</div>
+{% endblock %}

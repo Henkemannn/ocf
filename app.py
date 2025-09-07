@@ -1106,24 +1106,62 @@ def dashboard():
                    (u['tenant_id'], '', 1, 'Europe/Stockholm'))
         db.commit()
         s = db.execute("SELECT * FROM settings WHERE tenant_id=?", (u['tenant_id'],)).fetchone()
-    # Alltid initialisera variablerna
     arbetsperiod_start = s['arbetsperiod_start'] if s and 'arbetsperiod_start' in s.keys() and s['arbetsperiod_start'] else None
     arbetsperiod_slut = s['arbetsperiod_slut'] if s and 'arbetsperiod_slut' in s.keys() and s['arbetsperiod_slut'] else None
 
-    # Visa alltid dagvecka-meny enligt robust logik
-    unique_menus = []
-    dagvecka_dagar = []
-    dagvecka_info = None
+    # --- TURNUS från nya motorn ---
+    from datetime import datetime, timedelta
+    import rotation
+    def _monday_of_week(d: datetime) -> datetime:
+        return d - timedelta(days=d.weekday())
+    def _iso_day_start(d: datetime) -> str:
+        return d.strftime("%Y-%m-%dT00:00")
+    def _iso_day_end(d: datetime) -> str:
+        return d.strftime("%Y-%m-%dT23:59")
+
+    rig_id = u['rig_id'] if u and 'rig_id' in u else 1
+    week = request.args.get("week")
+    start = request.args.get("start")
+    end = request.args.get("end")
+    if start and end:
+        try:
+            d0 = datetime.strptime(start, "%Y-%m-%d")
+            d1 = datetime.strptime(end, "%Y-%m-%d")
+        except ValueError:
+            return _bad_request("Fel datumformat, använd YYYY-MM-DD för start/end.")
+    elif week:
+        try:
+            d = datetime.strptime(week + "-1", "%G-W%V-%u")
+            d0 = d
+            d1 = d0 + timedelta(days=6)
+        except ValueError:
+            return _bad_request("Fel week-format, använd t.ex. 2025-W37.")
+    else:
+        today = datetime.now()
+        d0 = _monday_of_week(today)
+        d1 = d0 + timedelta(days=6)
+    start_ts = _iso_day_start(d0)
+    end_ts = _iso_day_end(d1)
+    slots = rotation.view(rig_id=rig_id, start_ts=start_ts, end_ts=end_ts)
+    by_day = {}
+    for s in slots:
+        start_day = s["start_ts"][:10]
+        by_day.setdefault(start_day, []).append(s)
+    # --- /TURNUS ---
 
     rig_name = None
     if u and u['rig_id']:
         rig = db.execute("SELECT name FROM rigs WHERE id=?", (u['rig_id'],)).fetchone()
         if rig:
             rig_name = rig['name']
+    # Menyhämtning som tidigare
     return render_template('dashboard.html', s=s, rig_name=rig_name,
                            arbetsperiod_start=arbetsperiod_start,
                            arbetsperiod_slut=arbetsperiod_slut,
-                           user=u)
+                           user=u,
+                           week_start=d0.date().isoformat(),
+                           week_end=d1.date().isoformat(),
+                           slots_by_day=by_day)
 
 ## Legacy reset_cycle and day_instances logic removed
 
