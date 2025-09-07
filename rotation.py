@@ -261,23 +261,23 @@ def unbind_user_from_slot(slot_id: int) -> int:
 
 # ---------- Query för preview & view ----------
 def preview(rig_id: int, start_ts: str, end_ts: str) -> List[Dict[str, Any]]:
-    """
-    Hämtar slots (alla status) i intervallet för en rigg.
-    Används för /turnus/preview i Steg 6.
-    """
-    q = """
-    SELECT s.*, b.user_id, u.name AS user_name
-    FROM turnus_slots s
-    LEFT JOIN turnus_account_binding b ON b.slot_id = s.id
-    LEFT JOIN users u ON u.id = b.user_id
-    WHERE s.rig_id = ?
-      AND s.start_ts >= ?
-      AND s.end_ts <= ?
-    ORDER BY s.start_ts ASC
-    """
-    with _conn() as conn:
-        rows = conn.execute(q, (rig_id, start_ts, end_ts)).fetchall()
-        return [dict(r) for r in rows]
+        """
+        Hämtar slots (alla status) i intervallet för en rigg.
+        Används för /turnus/preview i Steg 6.
+        """
+        q = """
+SELECT s.*, b.user_id, u.name AS user_name
+FROM turnus_slots s
+LEFT JOIN turnus_account_binding b ON b.slot_id = s.id
+LEFT JOIN users u ON u.id = b.user_id
+WHERE s.rig_id = ?
+    AND s.start_ts < ?
+    AND s.end_ts > ?
+ORDER BY s.start_ts ASC
+        """
+        with _conn() as conn:
+                rows = conn.execute(q, (rig_id, end_ts, start_ts)).fetchall()
+                return [dict(r) for r in rows]
 
 def view(rig_id: int, start_ts: str, end_ts: str) -> List[Dict[str, Any]]:
     """
