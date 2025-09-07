@@ -1279,6 +1279,132 @@ def superuser_rig_detail(rig_id):
         ''')
         db.commit()
     return render_template('superuser_panel.html', admins=admins, error=error)
+# --- TURNUS ADMIN (Steg 8) ---
+from flask import request, jsonify, render_template, redirect, url_for, flash
+import rotation
+import json
+
+@app.get("/turnus/admin")
+def turnus_admin_home():
+    rig_id = request.args.get("rig_id", type=int)
+    templates = rotation.list_templates(rig_id=rig_id) if rig_id else rotation.list_templates()
+    slots = rotation.list_slots(rig_id=rig_id) if rig_id else rotation.list_slots()
+    if len(slots) > 200:
+        slots = slots[-200:]
+    return render_template("turnus_admin.html", templates=templates, slots=slots, rig_id=rig_id)
+
+@app.post("/turnus/admin/template/create")
+def turnus_template_create():
+    name = request.form.get("name")
+    rig_id = request.form.get("rig_id", type=int)
+    pattern_json = request.form.get("pattern_json")
+    if not name or not pattern_json:
+        flash("Name och pattern_json krävs", "error")
+        return redirect(url_for("turnus_admin_home"))
+    try:
+        tmpl_id = rotation.create_template(name=name, pattern=json.loads(pattern_json), rig_id=rig_id, is_active=True)
+        flash(f"Template skapad (id={tmpl_id})", "success")
+    except Exception as e:
+        flash(f"Misslyckades att skapa template: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/template/update/<int:template_id>")
+def turnus_template_update(template_id: int):
+    name = request.form.get("name")
+    rig_id = request.form.get("rig_id", type=int)
+    pattern_json = request.form.get("pattern_json")
+    is_active = request.form.get("is_active")
+    try:
+        rotation.update_template(
+            template_id,
+            name=name if name else None,
+            rig_id=rig_id if rig_id is not None else None,
+            pattern=json.loads(pattern_json) if pattern_json else None,
+            is_active=(is_active == "1") if is_active is not None else None
+        )
+        flash("Template uppdaterad", "success")
+    except Exception as e:
+        flash(f"Misslyckades att uppdatera: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/template/active/<int:template_id>")
+def turnus_template_active(template_id: int):
+    active = request.form.get("active") == "1"
+    rig_id = request.form.get("rig_id", type=int)
+    try:
+        rotation.set_template_active(template_id, active)
+        flash("Template status uppdaterad", "success")
+    except Exception as e:
+        flash(f"Fel: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/slots/generate")
+def turnus_slots_generate():
+    template_id = request.form.get("template_id", type=int)
+    rig_id = request.form.get("rig_id", type=int)
+    start_date = request.form.get("start_date")
+    end_date = request.form.get("end_date")
+    if not all([template_id, rig_id, start_date, end_date]):
+        flash("template_id, rig_id, start_date, end_date krävs", "error")
+        return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+    try:
+        n = rotation.generate_slots_from_template(template_id, start_date, end_date, rig_id_override=rig_id)
+        flash(f"Genererade {n} slots", "success")
+    except Exception as e:
+        flash(f"Misslyckades att generera: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/slots/publish")
+def turnus_slots_publish():
+    rig_id = request.form.get("rig_id", type=int)
+    ids_raw = request.form.get("slot_ids", "")
+    try:
+        slot_ids = [int(x) for x in ids_raw.split(",") if x.strip().isdigit()]
+        n = rotation.publish_slots(slot_ids)
+        flash(f"Publicerade {n} slots", "success")
+    except Exception as e:
+        flash(f"Fel vid publish: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/slots/delete")
+def turnus_slots_delete():
+    rig_id = request.form.get("rig_id", type=int)
+    ids_raw = request.form.get("slot_ids", "")
+    try:
+        slot_ids = [int(x) for x in ids_raw.split(",") if x.strip().isdigit()]
+        n = rotation.delete_slots(slot_ids)
+        flash(f"Raderade {n} slots", "success")
+    except Exception as e:
+        flash(f"Fel vid delete: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/bind")
+def turnus_bind():
+    slot_id = request.form.get("slot_id", type=int)
+    user_id = request.form.get("user_id", type=int)
+    rig_id = request.form.get("rig_id", type=int)
+    notes = request.form.get("notes")
+    if not slot_id or not user_id:
+        flash("slot_id och user_id krävs", "error")
+        return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+    try:
+        rotation.bind_user_to_slot(slot_id, user_id, notes=notes)
+        flash("User bunden till slot", "success")
+    except Exception as e:
+        flash(f"Fel vid bind: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+
+@app.post("/turnus/admin/unbind")
+def turnus_unbind():
+    slot_id = request.form.get("slot_id", type=int)
+    rig_id = request.form.get("rig_id", type=int)
+    try:
+        n = rotation.unbind_user_from_slot(slot_id)
+        flash(f"Lösgjorde {n} binding(ar)", "success")
+    except Exception as e:
+        flash(f"Fel vid unbind: {e}", "error")
+    return redirect(url_for("turnus_admin_home", rig_id=rig_id))
+# --- /TURNUS ADMIN (Steg 8) ---
 if __name__ == "__main__":
     app.run(debug=True)
 

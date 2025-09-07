@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <title>Turnus – Admin</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1rem 2rem; }
+    h1, h2 { margin: .2rem 0; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem; }
+    label { display:block; margin-top:.4rem; }
+    input, textarea, select { width: 100%; padding:.4rem; margin-top:.2rem; }
+    .muted { color:#666; font-size: .9rem; }
+    ul { margin: .3rem 0 .8rem 1.2rem; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Turnus – Admin</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+      {% for cat, msg in messages %}
+        <li><strong>{{ cat|upper }}:</strong> {{ msg }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="get" action="{{ url_for('turnus_admin_home') }}">
+    <label>Rigg-ID (valfritt)
+      <input type="number" name="rig_id" value="{{ rig_id or '' }}" placeholder="t.ex. 1">
+    </label>
+    <button type="submit">Filtrera</button>
+  </form>
+
+  <div class="grid">
+    <!-- Templates -->
+    <div class="card">
+      <h2>Templates</h2>
+
+      <h3>Skapa ny</h3>
+      <form method="post" action="{{ url_for('turnus_template_create') }}">
+        <label>Namn <input name="name" required></label>
+        <label>Rigg-ID (valfritt) <input name="rig_id" type="number" value="{{ rig_id or '' }}"></label>
+        <label>Pattern JSON <textarea name="pattern_json" rows="6" class="mono" required>{
+  "weekly": [
+    {"weekday": 0, "start": "07:00", "end": "19:00", "role": "dag"}
+  ]
+}</textarea></label>
+        <button type="submit">Skapa template</button>
+      </form>
+
+      <hr>
+      <h3>Befintliga</h3>
+      {% if not templates %}
+        <p class="muted">Inga templates ännu.</p>
+      {% else %}
+        {% for t in templates %}
+          <details>
+            <summary>#{{ t.id }} – {{ t.name }} {% if not t.is_active %}(inaktiv){% endif %}</summary>
+            <form method="post" action="{{ url_for('turnus_template_update', template_id=t.id) }}">
+              <label>Namn <input name="name" value="{{ t.name }}"></label>
+              <label>Rigg-ID <input name="rig_id" type="number" value="{{ t.rig_id or '' }}"></label>
+              <label>Pattern JSON <textarea name="pattern_json" rows="6" class="mono">{{ t.pattern | tojson(indent=2) }}</textarea></label>
+              <label>Aktiv?
+                <select name="is_active">
+                  <option value="1" {% if t.is_active %}selected{% endif %}>Ja</option>
+                  <option value="0" {% if not t.is_active %}selected{% endif %}>Nej</option>
+                </select>
+              </label>
+              <button type="submit">Uppdatera</button>
+            </form>
+            <form method="post" action="{{ url_for('turnus_template_active', template_id=t.id) }}" style="margin-top:.5rem">
+              <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
+              {% if t.is_active %}
+                <input type="hidden" name="active" value="0">
+                <button type="submit">Inaktivera</button>
+              {% else %}
+                <input type="hidden" name="active" value="1">
+                <button type="submit">Aktivera</button>
+              {% endif %}
+            </form>
+          </details>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <!-- Slots -->
+    <div class="card">
+      <h2>Slots</h2>
+
+      <h3>Generera från template</h3>
+      <form method="post" action="{{ url_for('turnus_slots_generate') }}">
+        <label>Template ID <input name="template_id" type="number" required></label>
+        <label>Rigg-ID <input name="rig_id" type="number" value="{{ rig_id or '' }}" required></label>
+        <label>Startdatum (YYYY-MM-DD) <input name="start_date" placeholder="2025-09-08" required></label>
+        <label>Slutdatum (YYYY-MM-DD) <input name="end_date" placeholder="2025-09-14" required></label>
+        <button type="submit">Generera slots</button>
+      </form>
+
+      <hr>
+      <h3>Senaste slots (max 200)</h3>
+      {% if not slots %}
+        <p class="muted">Inga slots skapade ännu.</p>
+      {% else %}
+        <form method="post" action="{{ url_for('turnus_slots_publish') }}">
+          <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
+          <label>Slot IDs (komma-separerat) <input name="slot_ids" placeholder="12,13,14"></label>
+          <button type="submit">Publish</button>
+        </form>
+
+        <form method="post" action="{{ url_for('turnus_slots_delete') }}" style="margin-top:.5rem">
+          <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
+          <label>Slot IDs (komma-separerat) <input name="slot_ids" placeholder="12,13,14"></label>
+          <button type="submit">Delete</button>
+        </form>
+
+        <p class="muted">Tips: kopiera ID från listan nedan.</p>
+        <ul class="mono">
+          {% for s in slots %}
+            <li>
+              #{{ s.id }} | rig={{ s.rig_id }} | {{ s.start_ts }}–{{ s.end_ts }} | {{ s.role or 'pass' }} | {{ s.status }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <hr>
+      <h3>Bind/Unbind användare</h3>
+      <form method="post" action="{{ url_for('turnus_bind') }}">
+        <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
+        <label>Slot ID <input name="slot_id" type="number" required></label>
+        <label>User ID <input name="user_id" type="number" required></label>
+        <label>Notes <input name="notes"></label>
+        <button type="submit">Bind</button>
+      </form>
+
+      <form method="post" action="{{ url_for('turnus_unbind') }}" style="margin-top:.5rem">
+        <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
+        <label>Slot ID <input name="slot_id" type="number" required></label>
+        <button type="submit">Unbind</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
