@@ -63,7 +63,7 @@ def create_template(name: str, pattern: Dict[str, Any], rig_id: Optional[int] = 
                VALUES (?, ?, ?, ?, datetime('now'))""",
             (name, rig_id, json.dumps(pattern), 1 if is_active else 0)
         )
-        return cur.lastrowid
+    return cur.lastrowid if cur.lastrowid is not None else -1
 
 def update_template(template_id: int, *, name: Optional[str] = None,
                     pattern: Optional[Dict[str, Any]] = None,

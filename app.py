@@ -1348,6 +1348,8 @@ def turnus_slots_generate():
         flash("template_id, rig_id, start_date, end_date krävs", "error")
         return redirect(url_for("turnus_admin_home", rig_id=rig_id))
     try:
+        if template_id is None or start_date is None or end_date is None:
+            return "Fel: template_id, start_date och end_date får inte vara None", 400
         n = rotation.generate_slots_from_template(template_id, start_date, end_date, rig_id_override=rig_id)
         flash(f"Genererade {n} slots", "success")
     except Exception as e:
@@ -1399,6 +1401,8 @@ def turnus_unbind():
     slot_id = request.form.get("slot_id", type=int)
     rig_id = request.form.get("rig_id", type=int)
     try:
+        if slot_id is None:
+            return "Fel: slot_id får inte vara None", 400
         n = rotation.unbind_user_from_slot(slot_id)
         flash(f"Lösgjorde {n} binding(ar)", "success")
     except Exception as e:
