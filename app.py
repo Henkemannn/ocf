@@ -81,6 +81,13 @@ try:
 except ImportError:
     PyPDF2 = None
 
+# --- TURNUS ENDPOINTS (Steg 6) ---
+from flask import request, jsonify
+import rotation
+from datetime import datetime
+
+# --- /TURNUS ENDPOINTS (Steg 6) ---
+
 # 2. App-init och variabler
 app = Flask(__name__)
 app.secret_key = 'byt-ut-denna-till-nagot-unikt-och-hemligt-2025!'
@@ -93,6 +100,92 @@ app.config['MAIL_PASSWORD'] = 'dwsi pmkt ises bxdi'
 mail = Mail(app)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# --- TURNUS ENDPOINTS (Steg 6) ---
+from flask import request, jsonify
+import rotation
+from datetime import datetime
+
+def _bad_request(msg: str, code: int = 400):
+    return jsonify({"ok": False, "error": msg}), code
+
+def _parse_ts_or_date(s: str, *, end=False) -> str:
+    """
+    Tillåt "YYYY-MM-DD" (konvertera till start/end på dagen) eller "YYYY-MM-DDTHH:MM".
+    Returnerar ISO-sträng "YYYY-MM-DDTHH:MM".
+    """
+    if not s:
+        raise ValueError("Tom sträng")
+    try:
+        # Full timestamp
+        dt = datetime.strptime(s, "%Y-%m-%dT%H:%M")
+        return dt.strftime("%Y-%m-%dT%H:%M")
+    except ValueError:
+        pass
+    try:
+        # Datum → börja/sluta på dygnet
+        d = datetime.strptime(s, "%Y-%m-%d")
+        if end:
+            d = d.replace(hour=23, minute=59)
+        else:
+            d = d.replace(hour=0, minute=0)
+        return d.strftime("%Y-%m-%dT%H:%M")
+    except ValueError:
+        raise ValueError("Fel format, använd YYYY-MM-DD eller YYYY-MM-DDTHH:MM")
+
+@app.get("/turnus/preview")
+def turnus_preview():
+    """
+    Returnerar slots (alla status) för rigg inom intervall.
+    Query: rig_id (int), start (YYYY-MM-DD eller YYYY-MM-DDTHH:MM),
+           end (samma format).
+    """
+    rig_id = request.args.get("rig_id", type=int)
+    start = request.args.get("start")
+    end = request.args.get("end")
+    if rig_id is None:
+        return _bad_request("Saknar rig_id (int).")
+    if not start or not end:
+        return _bad_request("Saknar start och/eller end.")
+    try:
+        start_ts = _parse_ts_or_date(start, end=False)
+        end_ts = _parse_ts_or_date(end, end=True)
+    except ValueError as e:
+        return _bad_request(str(e))
+
+    try:
+        rows = rotation.preview(rig_id=rig_id, start_ts=start_ts, end_ts=end_ts)
+        return jsonify({"ok": True, "count": len(rows), "items": rows})
+    except Exception as e:
+        # Logga gärna e med logger om ni har
+        return _bad_request(f"Misslyckades att hämta preview: {e}", 500)
+
+@app.get("/turnus/view")
+def turnus_view():
+    """
+    Returnerar endast publicerade slots för rigg inom intervall.
+    Query: rig_id (int), start (YYYY-MM-DD eller YYYY-MM-DDTHH:MM),
+           end (samma format).
+    """
+    rig_id = request.args.get("rig_id", type=int)
+    start = request.args.get("start")
+    end = request.args.get("end")
+    if rig_id is None:
+        return _bad_request("Saknar rig_id (int).")
+    if not start or not end:
+        return _bad_request("Saknar start och/eller end.")
+    try:
+        start_ts = _parse_ts_or_date(start, end=False)
+        end_ts = _parse_ts_or_date(end, end=True)
+    except ValueError as e:
+        return _bad_request(str(e))
+
+    try:
+        rows = rotation.view(rig_id=rig_id, start_ts=start_ts, end_ts=end_ts)
+        return jsonify({"ok": True, "count": len(rows), "items": rows})
+    except Exception as e:
+        return _bad_request(f"Misslyckades att hämta view: {e}", 500)
+# --- /TURNUS ENDPOINTS (Steg 6) ---
 
 # 3. Hjälpfunktioner
 def get_db():
@@ -1022,44 +1115,17 @@ def dashboard():
     dagvecka_dagar = []
     dagvecka_info = None
 
-    if arbetsperiod_start and s and s['menu_start_week'] and s['menu_start_index']:
-        start_date = datetime.strptime(arbetsperiod_start, "%Y-%m-%d").date()
-        anchor_week_iso = int(s['menu_start_week'])
-        anchor_menu_1to4 = int(s['menu_start_index'])
-        dagvecka_dates = get_dagvecka_dates(start_date)
-    # Legacy turnus logic removed. Menus and menu endpoints remain intact.
+    rig_name = None
+    if u and u['rig_id']:
+        rig = db.execute("SELECT name FROM rigs WHERE id=?", (u['rig_id'],)).fetchone()
+        if rig:
+            rig_name = rig['name']
+    return render_template('dashboard.html', s=s, rig_name=rig_name,
+                           arbetsperiod_start=arbetsperiod_start,
+                           arbetsperiod_slut=arbetsperiod_slut,
+                           user=u)
 
-    # Fallback om arbetsperiod fortfarande saknas
-    if not arbetsperiod_start:
-        start_date = date.today()
-        arbetsperiod_start = start_date.isoformat()
-        # Legacy turnus logic removed. Menus and menu endpoints remain intact.
-        cycles = db.execute("SELECT * FROM work_cycles WHERE tenant_id=? ORDER BY id DESC LIMIT 5", (u['tenant_id'],)).fetchall()
-        rig_name = None
-        if u and u['rig_id']:
-            rig = db.execute("SELECT name FROM rigs WHERE id=?", (u['rig_id'],)).fetchone()
-            if rig:
-                rig_name = rig['name']
-        return render_template('dashboard.html', s=s, cycles=cycles, rig_name=rig_name,
-                               arbetsperiod_start=arbetsperiod_start,
-                               arbetsperiod_slut=arbetsperiod_slut,
-                               user=u)
-        new_val = 0 if row['done'] else 1
-        db.execute("UPDATE day_instances SET done=? WHERE id=?", (new_val, instance_id))
-        db.commit()
-    return ("", 204)
-
-@app.route('/reset_cycle/<int:work_cycle_id>', methods=['POST'])
-@login_required
-def reset_cycle(work_cycle_id):
-    db = get_db()
-    u = current_user()
-    if u is None:
-        return redirect(url_for('login', next=request.path))
-    db.execute("UPDATE day_instances SET done=0 WHERE tenant_id=? AND work_cycle_id=?", (u['tenant_id'], work_cycle_id))
-    db.commit()
-    flash("Avkryssinger er fjernet for denne turen.", "success")
-    return redirect(url_for('week_view', work_cycle_id=work_cycle_id))
+## Legacy reset_cycle and day_instances logic removed
 
 # =======================
 # Route: Import av Excel-fliken "Menyrotasjon"
@@ -1174,8 +1240,7 @@ def superuser_rig_detail(rig_id):
             )
         ''')
         db.commit()
-        return render_template('superuser_panel.html', admins=admins, error=error)
-            sys.exit(0)
+    return render_template('superuser_panel.html', admins=admins, error=error)
+if __name__ == "__main__":
     app.run(debug=True)
-
 
