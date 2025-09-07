@@ -1,3 +1,20 @@
+from sqlite3 import connect
+
+@app.get("/turnus/admin")
+def turnus_admin_home():
+    rig_id = request.args.get("rig_id", type=int)
+    templates = rotation.list_templates(rig_id=rig_id) if rig_id else rotation.list_templates()
+    slots = rotation.list_slots(rig_id=rig_id) if rig_id else rotation.list_slots()
+    if len(slots) > 200:
+        slots = slots[-200:]
+
+    conn = connect("app.db")
+    conn.row_factory = rotation.sqlite3.Row
+    users = conn.execute("SELECT id, name FROM users ORDER BY name").fetchall()
+    conn.close()
+
+    return render_template("turnus_admin.html",
+                           templates=templates, slots=slots, rig_id=rig_id, users=users)
 def get_dagvecka_dates(start_date):
     """Returnerar lista med datum för dagvecka: fredag efter startdatum till fredag veckan därpå (8 dagar)."""
     # Hitta första fredag efter startdatum

@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Adminpanel</h2>
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <div style="font-size:2.5rem;">🍽️</div>
+          <h5 class="card-title mt-2">Administrer ukemeny</h5>
+          <p class="card-text text-center">Last opp, rediger og ruller menyer för din rigg.</p>
+          <a href="{{ url_for('admin_menu') }}" class="btn btn-primary mt-2">Gå til ukemeny</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <div style="font-size:2.5rem;">👥</div>
+          <h5 class="card-title mt-2">Administrer brukere</h5>
+          <p class="card-text text-center">Opprett, rediger og slett kokker og admins för din rigg.</p>
+          <a href="#user-section" class="btn btn-secondary mt-2">Gå til brukeradministrasjon</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <div style="font-size:2.5rem;">🗓️</div>
+          <h5 class="card-title mt-2">Turnus & Kockplanering</h5>
+          <p class="card-text text-center">Planera och publicera arbetspass för kockar.</p>
+          <a href="{{ url_for('turnus_admin_home') }}" class="btn btn-primary mt-2">Gå till Turnus</a>
+          <a href="{{ url_for('turnus_admin_home') }}?preview=1" class="btn btn-secondary mt-2">Turnus – Preview</a>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-2">Visa Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mb-4">
+    <h4>Riggar</h4>
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr><th>Navn</th><th>Beskrivelse</th></tr>
+      </thead>
+      <tbody>
+        {% set admin_rig = rigs|selectattr('id', 'equalto', users[0]['rig_id'])|first if users|length > 0 else None %}
+        {% if admin_rig %}
+        <tr>
+          <td>{{ admin_rig['name'] }}</td>
+          <td>{{ admin_rig['description'] or '' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">Ingen riggar registrert.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+    <!-- Her kan du legge til knapp for å legge til ny rigg -->
+  </div>
+  <div class="mb-4">
+    <h4>Brukere (kockar/vikarier/admins)</h4>
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr><th>Navn</th><th>E-post</th><th>Rolle</th><th>Rigg</th></tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user['name'] }}</td>
+          <td>{{ user['email'] }}</td>
+          <td>{{ user['role'] }}</td>
+          <td>
+            {% set rig = rigs|selectattr('id', 'equalto', user['rig_id'])|first %}
+            {{ rig['name'] if rig else '' }}
+          </td>
+          <td>
+            <form method="post" style="display:inline;">
+              <input type="hidden" name="delete_user_id" value="{{ user['id'] }}">
+              <button type="submit" class="btn btn-link p-0 m-0 align-baseline" title="Slett bruker" style="color:#dc3545; font-size:1.2rem;">
+                <span aria-hidden="true">🗑️</span>
+              </button>
+            </form>
+            <form method="post" style="display:inline; margin-left: 6px;">
+              <input type="hidden" name="reset_pw_user_id" value="{{ user['id'] }}">
+              <button type="submit" class="btn btn-link p-0 m-0 align-baseline" title="Generer nytt engangspassord" style="color:#ffc107; font-size:1.2rem;">
+                <span aria-hidden="true">🔑</span>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Ingen brukere registrert.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="mt-4">
+    {% if new_user_info %}
+      <div class="alert alert-info">
+        <strong>Ny bruker opprettet!</strong><br>
+        E-post: <code>{{ new_user_info.email }}</code><br>
+        Rolle: <code>{{ new_user_info.role }}</code><br>
+        Engångslösenord: <code>{{ new_user_info.temp_password }}</code><br>
+        <span class="text-danger">Dela detta med brukeren – det visas bara én gang!</span>
+      </div>
+    {% endif %}
+  <h5>Opprett ny bruker for denne riggen</h5>
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form method="post" class="row g-2">
+        <div class="col-md-3">
+          <input type="text" class="form-control" name="name" placeholder="Navn" required>
+        </div>
+        <div class="col-md-3">
+          <input type="email" class="form-control" name="email" placeholder="E-post" required>
+        </div>
+        <div class="col-md-3">
+          <select class="form-control" name="role" required>
+            <option value="kock">Kock</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-success w-100">Opprett bruker</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

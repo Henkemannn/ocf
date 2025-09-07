@@ -16,7 +16,10 @@
   </style>
 </head>
 <body>
-  <h1>Turnus – Admin</h1>
+  <div class="admin-toolbar" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+    <a href="{{ url_for('admin_home') }}" class="btn btn-light">← Till Admin</a>
+    <h1 style="margin:0;">Turnus – Admin</h1>
+  </div>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul>
@@ -92,10 +95,10 @@
 
       <h3>Generera från template</h3>
       <form method="post" action="{{ url_for('turnus_slots_generate') }}">
-        <label>Template ID <input name="template_id" type="number" required></label>
-        <label>Rigg-ID <input name="rig_id" type="number" value="{{ rig_id or '' }}" required></label>
-        <label>Startdatum (YYYY-MM-DD) <input name="start_date" placeholder="2025-09-08" required></label>
-        <label>Slutdatum (YYYY-MM-DD) <input name="end_date" placeholder="2025-09-14" required></label>
+  <label>Template ID <input name="template_id" type="number" required></label>
+  <label>Rigg-ID <input name="rig_id" type="number" value="{{ rig_id or '' }}" required></label>
+  <label>Startdatum <input name="start_date" type="date" required></label>
+  <label>Slutdatum <input name="end_date" type="date" required></label>
         <button type="submit">Generera slots</button>
       </form>
 
@@ -104,26 +107,73 @@
       {% if not slots %}
         <p class="muted">Inga slots skapade ännu.</p>
       {% else %}
-        <form method="post" action="{{ url_for('turnus_slots_publish') }}">
+        <div class="mb-2">
+          <button type="button" id="markAll" class="btn btn-sm btn-secondary">Markera alla</button>
+          <button type="button" id="unmarkAll" class="btn btn-sm btn-secondary">Avmarkera alla</button>
+          <button type="button" id="publishSelected" class="btn btn-sm btn-success">Publish valda</button>
+          <button type="button" id="deleteSelected" class="btn btn-sm btn-danger">Delete valda</button>
+        </div>
+        <form id="bulkPublishForm" method="post" action="{{ url_for('turnus_slots_publish') }}">
           <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
-          <label>Slot IDs (komma-separerat) <input name="slot_ids" placeholder="12,13,14"></label>
-          <button type="submit">Publish</button>
+          <input type="hidden" name="slot_ids" id="slotIdsPublish">
         </form>
-
-        <form method="post" action="{{ url_for('turnus_slots_delete') }}" style="margin-top:.5rem">
+        <form id="bulkDeleteForm" method="post" action="{{ url_for('turnus_slots_delete') }}">
           <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
-          <label>Slot IDs (komma-separerat) <input name="slot_ids" placeholder="12,13,14"></label>
-          <button type="submit">Delete</button>
+          <input type="hidden" name="slot_ids" id="slotIdsDelete">
         </form>
-
-        <p class="muted">Tips: kopiera ID från listan nedan.</p>
-        <ul class="mono">
-          {% for s in slots %}
-            <li>
-              #{{ s.id }} | rig={{ s.rig_id }} | {{ s.start_ts }}–{{ s.end_ts }} | {{ s.role or 'pass' }} | {{ s.status }}
-            </li>
-          {% endfor %}
-        </ul>
+        <table class="table table-bordered table-sm mt-2">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll"></th>
+              <th>ID</th>
+              <th>Rigg</th>
+              <th>Start</th>
+              <th>Slut</th>
+              <th>Roll</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in slots %}
+            <tr>
+              <td><input type="checkbox" class="slot-checkbox" value="{{ s.id }}"></td>
+              <td>{{ s.id }}</td>
+              <td>{{ s.rig_id }}</td>
+              <td>{{ s.start_ts }}</td>
+              <td>{{ s.end_ts }}</td>
+              <td>{{ s.role or 'pass' }}</td>
+              <td>
+                {% if s.status == 'planned' %}<span class="badge bg-secondary">Planned</span>{% endif %}
+                {% if s.status == 'published' %}<span class="badge bg-success">Published</span>{% endif %}
+                {% if s.status == 'cancelled' %}<span class="badge bg-danger">Cancelled</span>{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <script>
+        function getSelectedIds() {
+          return Array.from(document.querySelectorAll('.slot-checkbox:checked'))
+                      .map(cb => cb.value).join(',');
+        }
+        document.getElementById('publishSelected').onclick = () => {
+          document.getElementById('slotIdsPublish').value = getSelectedIds();
+          document.getElementById('bulkPublishForm').submit();
+        };
+        document.getElementById('deleteSelected').onclick = () => {
+          document.getElementById('slotIdsDelete').value = getSelectedIds();
+          document.getElementById('bulkDeleteForm').submit();
+        };
+        document.getElementById('markAll').onclick = () => {
+          document.querySelectorAll('.slot-checkbox').forEach(cb => cb.checked = true);
+        };
+        document.getElementById('unmarkAll').onclick = () => {
+          document.querySelectorAll('.slot-checkbox').forEach(cb => cb.checked = false);
+        };
+        document.getElementById('selectAll').onclick = (e) => {
+          document.querySelectorAll('.slot-checkbox').forEach(cb => cb.checked = e.target.checked);
+        };
+        </script>
       {% endif %}
 
       <hr>
@@ -131,7 +181,14 @@
       <form method="post" action="{{ url_for('turnus_bind') }}">
         <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
         <label>Slot ID <input name="slot_id" type="number" required></label>
-        <label>User ID <input name="user_id" type="number" required></label>
+        <label>Kock/User
+          <select name="user_id" required>
+            <option value="" disabled selected>Välj kock...</option>
+            {% for u in users %}
+              <option value="{{ u.id }}">{{ u.name }} (id: {{ u.id }})</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>Notes <input name="notes"></label>
         <button type="submit">Bind</button>
       </form>
