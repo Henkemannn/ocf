@@ -179,28 +179,31 @@ def turnus_view():
     except Exception as e:
         return _bad_request(f"Misslyckades att hämta view: {e}", 500)
 # --- /TURNUS ENDPOINTS (Steg 6) ---
-@app.route('/turnus_admin/generate_6cooks', methods=['POST'])
-def turnus_generate_6cooks():
-    start_date = request.form.get('start_date')
-    rig_id = request.form.get('rig_id', type=int) or 1
-    if not start_date:
-        flash('Du må velge startdato!', 'error')
-        return redirect(url_for('turnus_admin_home'))
-    # 6 virtuelle kokker
-    cook_names = [f'Kokk {i} (virtuell)' for i in range(1, 7)]
-    # Generer turnus for 1 år (kan justeres)
-    end_date = (datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=365)).strftime('%Y-%m-%d')
-    try:
-        count = rotation.generate_turnus_for_cooks(
-            rig_id=rig_id,
-            start_date=start_date,
-            end_date=end_date,
-            cook_names=cook_names
-        )
-        flash(f'Turnus generert for {count} dager og 6 kokker!', 'success')
-    except Exception as e:
-        flash(f'Feil ved generering: {e}', 'error')
-    return redirect(url_for('turnus_admin_home'))
+
+# OLD TURNUS CODE - COMMENTED OUT
+# The old 6-cook generation system has been replaced with the new template-based system
+# @app.route('/turnus_admin/generate_6cooks', methods=['POST'])
+# def turnus_generate_6cooks():
+#     start_date = request.form.get('start_date')
+#     rig_id = request.form.get('rig_id', type=int) or 1
+#     if not start_date:
+#         flash('Du må velge startdato!', 'error')
+#         return redirect(url_for('turnus_admin_home'))
+#     # 6 virtuelle kokker
+#     cook_names = [f'Kokk {i} (virtuell)' for i in range(1, 7)]
+#     # Generer turnus for 1 år (kan justeres)
+#     end_date = (datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=365)).strftime('%Y-%m-%d')
+#     try:
+#         count = rotation.generate_turnus_for_cooks(
+#             rig_id=rig_id,
+#             start_date=start_date,
+#             end_date=end_date,
+#             cook_names=cook_names
+#         )
+#         flash(f'Turnus generert for {count} dager og 6 kokker!', 'success')
+#     except Exception as e:
+#         flash(f'Feil ved generering: {e}', 'error')
+#     return redirect(url_for('turnus_admin_home'))
 # 3. Hjälpfunktioner
 def get_db():
     if 'db' not in g:

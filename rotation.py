@@ -298,57 +298,60 @@ def view(rig_id: int, start_ts: str, end_ts: str) -> List[Dict[str, Any]]:
     with _conn() as conn:
         rows = conn.execute(q, (rig_id, start_ts, end_ts)).fetchall()
         return [dict(r) for r in rows]
-def generate_turnus_for_cooks(
-    rig_id: int,
-    start_date: str,
-    end_date: str,
-    cook_names: list,
-    snu_days: list = None,
-    gap_days: list = None
-) -> int:
-    """
-    Genererar och skriver hela turnusen för 6 kockar till databasen.
-    cook_names: lista med 6 namn (virtuella kockar, kan mappas till riktiga användare)
-    snu_days: lista med datumsträngar (YYYY-MM-DD) för snu-dagar
-    gap_days: lista med datumsträngar (YYYY-MM-DD) för glapp (ingen kock)
-    Returnerar antal skapade slots.
-    """
-    if len(cook_names) != 6:
-        raise ValueError("Exakt 6 kockar krävs")
-    snu_days = set(snu_days or [])
-    gap_days = set(gap_days or [])
-    d0 = _parse_date(start_date)
-    d1 = _parse_date(end_date)
-    days = list(_daterange(d0, d1))
-    slots = []
-    cook_idx = 0
-    for d in days:
-        ds = d.strftime('%Y-%m-%d')
-        if ds in gap_days:
-            continue  # Ingen kock denna dag
-        if ds in snu_days:
-            # Snu-dag: rotera kockarna (t.ex. hoppa till nästa)
-            cook_idx = (cook_idx + 1) % 6
-        cook = cook_names[cook_idx]
-        start_dt = datetime(d.year, d.month, d.day, 7, 0)
-        end_dt = datetime(d.year, d.month, d.day, 19, 0)
-        slots.append((
-            None,  # template_id
-            rig_id,
-            _iso(start_dt),
-            _iso(end_dt),
-            cook,
-            "planned",
-            None
-        ))
-        cook_idx = (cook_idx + 1) % 6
-    if not slots:
-        return 0
-    with _conn() as conn:
-        conn.executemany(
-            """INSERT INTO turnus_slots
-               (template_id, rig_id, start_ts, end_ts, role, status, notes, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))""",
-            slots
-        )
-        return conn.total_changes
+
+# OLD TURNUS CODE - COMMENTED OUT
+# The old 6-cook generation system has been replaced with the new template-based system
+# def generate_turnus_for_cooks(
+#     rig_id: int,
+#     start_date: str,
+#     end_date: str,
+#     cook_names: list,
+#     snu_days: list = None,
+#     gap_days: list = None
+# ) -> int:
+#     """
+#     Genererar och skriver hela turnusen för 6 kockar till databasen.
+#     cook_names: lista med 6 namn (virtuella kockar, kan mappas till riktiga användare)
+#     snu_days: lista med datumsträngar (YYYY-MM-DD) för snu-dagar
+#     gap_days: lista med datumsträngar (YYYY-MM-DD) för glapp (ingen kock)
+#     Returnerar antal skapade slots.
+#     """
+#     if len(cook_names) != 6:
+#         raise ValueError("Exakt 6 kockar krävs")
+#     snu_days = set(snu_days or [])
+#     gap_days = set(gap_days or [])
+#     d0 = _parse_date(start_date)
+#     d1 = _parse_date(end_date)
+#     days = list(_daterange(d0, d1))
+#     slots = []
+#     cook_idx = 0
+#     for d in days:
+#         ds = d.strftime('%Y-%m-%d')
+#         if ds in gap_days:
+#             continue  # Ingen kock denna dag
+#         if ds in snu_days:
+#             # Snu-dag: rotera kockarna (t.ex. hoppa till nästa)
+#             cook_idx = (cook_idx + 1) % 6
+#         cook = cook_names[cook_idx]
+#         start_dt = datetime(d.year, d.month, d.day, 7, 0)
+#         end_dt = datetime(d.year, d.month, d.day, 19, 0)
+#         slots.append((
+#             None,  # template_id
+#             rig_id,
+#             _iso(start_dt),
+#             _iso(end_dt),
+#             cook,
+#             "planned",
+#             None
+#         ))
+#         cook_idx = (cook_idx + 1) % 6
+#     if not slots:
+#         return 0
+#     with _conn() as conn:
+#         conn.executemany(
+#             """INSERT INTO turnus_slots
+#                (template_id, rig_id, start_ts, end_ts, role, status, notes, created_at)
+#                VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))""",
+#             slots
+#         )
+#         return conn.total_changes
