@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <title>Inköpslista - Vecka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 17px; margin: 0; padding: 0; background: #fff; }
+    .container { max-width: 700px; margin: 0 auto; padding: 2em 1em; }
+    h1, h2, h3 { margin-top: 0; }
+    ul { margin-bottom: 2em; }
+    .section { margin-bottom: 2em; }
+    @media print {
+      .no-print { display: none; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="no-print" style="text-align:right; margin-bottom:1em;">
+    <button onclick="window.print()" style="font-size:1em; padding:0.5em 1.2em;">Skriv ut</button>
+    <a href="javascript:window.close()" style="margin-left:1em;">Stäng</a>
+  </div>
+  <h1>Inköpslista</h1>
+  <h3>Tur: start {{ wc.start_friday }}</h3>
+  <div class="section">
+    <h2>Frysplock per dag</h2>
+    {% if frysplock_by_day %}
+      {% for d, items in frysplock_by_day.items() %}
+        <div style="margin-bottom:1.2em;">
+          <strong>{{ d }}</strong>
+          <ul style="list-style:none; padding-left:0;">
+            {% for item in items %}
+              <li><label><input type="checkbox"> {{ item }}</label></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">Inget frysplock angivet denna vecka.</p>
+    {% endif %}
+  </div>
+  <div class="section">
+    <h2>Rätter denna vecka</h2>
+    <ul>
+      {% for r in ratter %}
+      <li>{{ r }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+</body>
+</html>

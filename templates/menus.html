@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container" style="max-width:900px;">
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm border-0 p-4 h-100">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Importera menyer från PDF/docx</h4>
+          <form class="mb-3" action="{{ url_for('import_menu_file') }}" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+              <input type="file" class="form-control" name="file" accept=".pdf,.doc,.docx" required>
+              <button class="btn btn-outline-secondary" type="submit">Ladda upp</button>
+            </div>
+            <div class="form-text mt-1">Testfunktion – importerar ej ännu automatiskt, men filen sparas.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm border-0 p-4 h-100">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Importera menyrotation (Excel)</h4>
+          <form class="mb-3" action="{{ url_for('import_rotation') }}" method="post" enctype="multipart/form-data">
+            <div class="row g-2 align-items-end">
+              <div class="col-md-5">
+                <label class="form-label">År</label>
+                <input name="year" type="number" class="form-control" placeholder="t.ex. 2025" required>
+              </div>
+              <div class="col-md-7">
+                <label class="form-label">Excel (flik: Menyrotasjon)</label>
+                <input type="file" class="form-control" name="file" accept=".xlsx" required>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-outline-secondary mt-2">Importera & överstyr veckomenyer</button>
+                <div class="form-text">
+                  Läser kolumnerna <strong>Uke:</strong>, <strong>Meny 1</strong>.. <strong>Meny 4</strong> och fyller <em>vecka → meny</em> för valt år.
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="alert alert-info text-center mb-4">
+        <b>Tips:</b> Klicka på en meny för att lägga till eller ändra rätter, prepp, recept och frysplock för varje dag och måltid.
+      </div>
+    </div>
+  </div>
+  <div class="row g-4 justify-content-center">
+    {% for m in menus %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-between">
+          <h5 class="card-title mb-2">{{ m.name }} <span class="badge bg-light text-dark">{{ m.menu_index }}</span></h5>
+          <a class="btn btn-outline-primary btn-lg px-4 mt-2" href="{{ url_for('menu_detail', menu_id=m.id) }}">Öppna</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width:400px">
+  <h2 class="mb-4 text-center">Adminlogin</h2>
+  <div class="alert alert-info text-center mb-3">
+    For å opprette adminbruker må du kontakte superbruker/utvikler.<br>
+    (Adminopprettelse er deaktivert for vanlige brukere.)
+  </div>
+  <form method="post">
+    <div class="mb-3">
+      <label for="email" class="form-label">E-post</label>
+      <input type="email" class="form-control" id="email" name="email" required autofocus>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Passord</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Logg inn som admin</button>
+  </form>
+  <div class="mt-3 text-center">
+    <a href="/login">Vanlig innlogging</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height:60vh;">
+  <div class="card shadow-lg border-0 p-4 w-100" style="max-width: 420px;">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center" style="font-weight:600;">Skapa konto</h2>
+      <form method="post" class="d-flex flex-column gap-3">
+        <div>
+          <label class="form-label">E-post</label>
+          <input name="email" type="email" class="form-control form-control-lg" required>
+        </div>
+        <div>
+          <label class="form-label">Namn (valfritt)</label>
+          <input name="name" type="text" class="form-control form-control-lg">
+        </div>
+        <div>
+          <label class="form-label">Lösenord</label>
+          <input name="password" type="password" class="form-control form-control-lg" required>
+        </div>
+        <button class="btn btn-primary btn-lg mt-2">Skapa</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

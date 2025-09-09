@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width:400px">
+  <h2 class="mb-4 text-center">Opprett adminbruker</h2>
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+  <form method="post">
+    <div class="mb-3">
+      <label for="name" class="form-label">Navn</label>
+      <input type="text" class="form-control" id="name" name="name" required autofocus>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">E-post</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Passord</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100">Opprett admin</button>
+  </form>
+  <div class="mt-3 text-center">
+    <a href="/start">Tilbake</a>
+  </div>
+</div>
+{% endblock %}

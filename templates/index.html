@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width:400px">
+  <h2 class="mb-4 text-center">Velg innlogging</h2>
+  <form method="post">
+    <div class="d-grid gap-3">
+      <button type="submit" name="login_type" value="admin" class="btn btn-danger btn-lg">Adminlogin</button>
+      <button type="submit" name="login_type" value="user" class="btn btn-primary btn-lg">Kock/Vikarie-login</button>
+    </div>
+  </form>
+  <div class="mt-4 text-center">
+    {% if allow_admin_create %}
+      <a href="/create_admin" class="btn btn-outline-secondary">Opprett admin</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

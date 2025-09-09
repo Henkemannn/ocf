@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">{{ menu.name }}</h2>
+  <a class="btn btn-success" href="{{ url_for('menu_day_add', menu_id=menu.id) }}">Lägg till rätt</a>
+</div>
+
+<div class="row g-3">
+  {% for r in mdays %}
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <span class="badge bg-primary me-2">{{ r.meal_type|capitalize }}</span>
+            <span class="text-muted">Dag {{ r.dow }}</span>
+          </div>
+          <form method="post" action="{{ url_for('menu_day_delete', md_id=r.id) }}" onsubmit="return confirm('Ta bort?')">
+            <button class="btn btn-sm btn-outline-danger">Ta bort</button>
+          </form>
+        </div>
+        <h5 class="card-title mb-2">{{ r.dish_name }}</h5>
+        {% if r.prepp %}
+        <div class="mb-1"><span class="fw-bold">Prepp:</span> {{ r.prepp }}</div>
+        {% endif %}
+        {% if r.recept %}
+        <div class="mb-1"><span class="fw-bold">Recept:</span> {{ r.recept }}</div>
+        {% endif %}
+        {% if r.frysplock %}
+        <div class="mb-1"><span class="fw-bold">Frysplock:</span> {{ r.frysplock }}</div>
+        {% endif %}
+        {% if r.extra_notes %}
+        <div class="mb-1"><span class="fw-bold">Anteckningar:</span> {{ r.extra_notes }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-12 text-center text-muted">Inga rätter ännu.</div>
+  {% endfor %}
+</div>
+{% endblock %}

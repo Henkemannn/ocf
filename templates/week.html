@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid" style="max-width:1000px;">
+  <div class="row mb-4">
+    <div class="col-12 col-lg-10 mx-auto">
+      <div class="card shadow-lg border-0 p-4 mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h2 class="card-title mb-0" style="font-weight:600;">Tur: start {{ wc.start_friday }}</h2>
+            <div class="d-flex gap-2">
+              <!-- Legacy reset_cycle removed -->
+              <a class="btn btn-outline-primary btn-lg" href="{{ url_for('export_week', work_cycle_id=wc.id) }}" target="_blank">Exportera/skriv ut</a>
+              <a class="btn btn-outline-success btn-lg" href="{{ url_for('export_shopping', work_cycle_id=wc.id) }}" target="_blank">Inköpslista</a>
+            </div>
+          </div>
+          {% for d, items in grouped.items() %}
+          <div class="mb-4">
+            <h5 class="mb-3 text-primary" style="font-weight:500;">{{ d }}</h5>
+            <div class="row g-3">
+              {% for it in items %}
+              <div id="inst-{{ it.id }}" class="col-md-6">
+                <div class="card meal-card {{ it.meal_type }} mb-2 p-3 shadow-sm border-0 position-relative {{ 'done' if it.done else '' }}">
+                  {% if it.done %}
+                  <span class="position-absolute top-0 end-0 m-2 text-success" title="Klar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.97 11.03a.75.75 0 0 0 1.07 0l3.992-3.992a.75.75 0 1 0-1.06-1.06L7.5 9.439 6.03 7.97a.75.75 0 1 0-1.06 1.061l1.999 2z"/>
+                    </svg>
+                  </span>
+                  {% endif %}
+                  <div class="d-flex align-items-center mb-2">
+                    <input class="form-check-input big-check me-3" type="checkbox" {% if it.done %}checked{% endif %}>
+                    <div>
+                      <div class="fw-bold text-capitalize mb-1" style="font-size:1.1em;">{{ it.meal_type }}</div>
+                      <div style="font-size:1.05em;">{{ it.dish_name or '— (lägg rätt i meny‑mallen för detta läge)' }}</div>
+                      <div class="text-muted mt-1">Meny {{ it.menu_index }}</div>
+                    </div>
+                  </div>
+                  {% if it.prepp %}
+                  <div class="mb-1"><span class="fw-bold">Prepp:</span> {{ it.prepp }}</div>
+                  {% endif %}
+                  {% if it.recept %}
+                  <div class="mb-1"><span class="fw-bold">Recept:</span> {{ it.recept }}</div>
+                  {% endif %}
+                  {% if it.frysplock %}
+                  <div class="mb-1"><span class="fw-bold">Frysplock:</span> {{ it.frysplock }}</div>
+                  {% endif %}
+                  <form method="post" action="{{ url_for('update_note', instance_id=it.id) }}" class="d-flex align-items-center gap-2 mt-2" style="flex-wrap:wrap;">
+                    <label class="fw-bold mb-0" for="note-{{ it.id }}">Anteckningar:</label>
+                    <input id="note-{{ it.id }}" name="extra_notes" type="text" class="form-control form-control-sm" style="min-width:120px;max-width:320px;" value="{{ it.extra_notes or '' }}">
+                    <button class="btn btn-sm btn-outline-primary">Spara</button>
+                  </form>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

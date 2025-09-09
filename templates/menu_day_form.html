@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Lägg till rätt</h2>
+<form method="post" style="max-width:520px">
+  <div class="mb-3">
+    <label class="form-label">Veckodag (0=Mon ... 6=Sun)</label>
+    <input name="dow" type="number" min="0" max="6" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Måltid</label>
+    <select name="meal_type" class="form-select">
+      <option value="lunch">Lunch</option>
+      <option value="middag">Middag</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Rätt</label>
+    <input name="dish_name" type="text" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Prepp (valfritt)</label>
+    <textarea name="prepp" class="form-control" rows="2"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Recept (valfritt)</label>
+    <textarea name="recept" class="form-control" rows="2"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Frysplock (valfritt)</label>
+    <textarea name="frysplock" class="form-control" rows="2"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Extra anteckningar (valfritt)</label>
+    <textarea name="extra_notes" class="form-control" rows="2"></textarea>
+  </div>
+  <button class="btn btn-primary">Spara</button>
+  <a class="btn btn-link" href="{{ url_for('menus') }}">Avbryt</a>
+</form>
+{% endblock %}

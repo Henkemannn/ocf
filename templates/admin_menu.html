@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Administrer ukemeny</h2>
+  <p class="text-muted">Her kan du laste opp, redigere og rullere ukemenyer for din rigg.</p>
+  {% if startvecka_info %}
+    <div class="alert alert-info mb-3">
+      <strong>Startuke:</strong> {{ startvecka_info.start_index }}<br>
+      <strong>Startdato:</strong> {{ startvecka_info.start_date }}<br>
+      <strong>Aktiv menyuke nå:</strong> Uke {{ aktuell_uke }}
+    </div>
+  {% else %}
+    <div class="alert alert-warning mb-3">
+      <strong>Ingen startuke valgt!</strong> Velg startmeny og startuke nedenfor for å aktivere rotasjon.
+    </div>
+  {% endif %}
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+      <h5 class="card-title">Last opp meny</h5>
+          <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="menuFile" class="form-label">Velg fil (Excel, Word, CSV)</label>
+              <input class="form-control" type="file" id="menuFile" name="menuFile" accept=".xlsx,.xls,.csv,.docx">
+            </div>
+            <button type="submit" class="btn btn-primary">Last opp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+      <h5 class="card-title">Velg startmeny og uke</h5>
+          <form method="post">
+            <div class="mb-3">
+              <label for="startMenu" class="form-label">Startmeny (1-4)</label>
+              <input class="form-control" type="number" id="startMenu" name="startMenu" min="1" max="4" required>
+            </div>
+            <div class="mb-3">
+              <label for="startWeek" class="form-label">Startuke (1-53)</label>
+              <input class="form-control" type="number" id="startWeek" name="startWeek" min="1" max="53" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">Lagre innstillinger</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title">Alle menyer</h5>
+      <p class="text-muted">Alle menyer fra filen vises under. Hver meny (ark) vises separat.</p>
+      {% if menu_sheets and menu_sheets|length > 0 %}
+      <div class="accordion" id="menuAccordion">
+        {% for sheet in menu_sheets %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ loop.index }}">
+            <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="collapse{{ loop.index }}">
+              {{ sheet.uke }}
+            </button>
+          </h2>
+          <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#menuAccordion">
+            <div class="accordion-body">
+              <ul class="nav nav-tabs mb-3" id="tab{{ loop.index }}" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="lunsj-tab{{ loop.index }}" data-bs-toggle="tab" data-bs-target="#lunsj{{ loop.index }}" type="button" role="tab" aria-controls="lunsj{{ loop.index }}" aria-selected="true">Lunsj</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="middag-tab{{ loop.index }}" data-bs-toggle="tab" data-bs-target="#middag{{ loop.index }}" type="button" role="tab" aria-controls="middag{{ loop.index }}" aria-selected="false">Middag</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="tabContent{{ loop.index }}">
+                <div class="tab-pane fade show active" id="lunsj{{ loop.index }}" role="tabpanel" aria-labelledby="lunsj-tab{{ loop.index }}">
+                  {% set dager = ['Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag','Søndag'] %}
+                  {% set kategorier = sheet.lunsj|map(attribute='kategori')|reject('in', dager)|list %}
+                  {% set kategorier = kategorier|unique|sort %}
+                  <div class="table-responsive mb-3">
+                    <table class="table table-bordered table-sm align-middle">
+                      <thead>
+                        <tr>
+                          <th>Dag</th>
+                          {% for kat in kategorier %}<th>{{ kat|capitalize }}</th>{% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for dag in dager %}
+                        <tr>
+                          <td>{{ dag }}</td>
+                          {% for kat in kategorier %}
+                            <td>
+                              {% set rett = (sheet.lunsj|selectattr('dag', 'equalto', dag)|selectattr('kategori', 'equalto', kat)|map(attribute='rett')|list) %}
+                              {% if rett and rett[0] %}
+                                <span>{{ rett[0] }}</span>
+                                <a href="#" class="text-secondary ms-2 edit-rett" title="Redigera meny"
+                                  data-uke="{{ sheet.uke }}" data-dag="{{ dag }}" data-kategori="{{ kat }}" data-maltid="lunsj" data-rett="{{ rett[0] }}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1 1a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647.646-.647a.5.5 0 0 1 .708 0z"/><path d="M13.496 3.435l-1-1L4.939 9.992a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l7.557-7.558zm-2.122-.708 1 1-7.557 7.558-1.415.472.472-1.415 7.5-7.615z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>
+                                </a>
+                              {% endif %}
+                            </td>
+                          {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="middag{{ loop.index }}" role="tabpanel" aria-labelledby="middag-tab{{ loop.index }}">
+                  {% set dager = ['Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag','Søndag'] %}
+                  {% set kategorier = sheet.middag|map(attribute='kategori')|reject('in', dager)|list %}
+                  {% set kategorier = kategorier|unique|sort %}
+                  <div class="table-responsive mb-3">
+                    <table class="table table-bordered table-sm align-middle">
+                      <thead>
+                        <tr>
+                          <th>Dag</th>
+                          {% for kat in kategorier %}<th>{{ kat|capitalize }}</th>{% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for dag in dager %}
+                        <tr>
+                          <td>{{ dag }}</td>
+                          {% for kat in kategorier %}
+                            <td>
+                              {% set rett = (sheet.middag|selectattr('dag', 'equalto', dag)|selectattr('kategori', 'equalto', kat)|map(attribute='rett')|list) %}
+                              {% if rett and rett[0] %}
+                                <span>{{ rett[0] }}</span>
+                                <a href="#" class="text-secondary ms-2 edit-rett" title="Redigera meny"
+                                  data-uke="{{ sheet.uke }}" data-dag="{{ dag }}" data-kategori="{{ kat }}" data-maltid="middag" data-rett="{{ rett[0] }}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1 1a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647.646-.647a.5.5 0 0 1 .708 0z"/><path d="M13.496 3.435l-1-1L4.939 9.992a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l7.557-7.558zm-2.122-.708 1 1-7.557 7.558-1.415.472.472-1.415 7.5-7.615z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>
+                                </a>
+                              {% endif %}
+                            </td>
+                          {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+        <div class="alert alert-info">Ingen meny er lastet opp ennå.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

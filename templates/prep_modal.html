@@ -1,0 +1,30 @@
+<!-- Modal for prepplista per rett/dag_instance -->
+<div class="modal-header">
+  <h5 class="modal-title">Prepp for {{ day.dish_name }}</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Lukk"></button>
+</div>
+<div class="modal-body">
+  <form method="post" id="add-prep-form">
+    <div class="mb-3">
+      <label for="prep-text" class="form-label">Legg til ny prepp-punkt</label>
+      <input type="text" class="form-control" name="text" id="prep-text" placeholder="Skriv inn oppgave..." autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-success">Legg til</button>
+  </form>
+  <hr>
+  <ul class="list-group mb-3">
+    {% for item in items %}
+    <li class="list-group-item d-flex align-items-center">
+      <form method="post" class="me-2" style="display:inline-block;">
+        <input type="hidden" name="done_id" value="{{ item.id }}">
+        <input type="checkbox" name="done" value="1" {% if item.done %}checked{% endif %} onchange="this.form.submit()">
+      </form>
+      <span {% if item.done %}style="text-decoration:line-through; color:#888;"{% endif %}>{{ item.text }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lukk</button>
+</div>
+<!-- Norsk språk, enkel og tydelig UI -->

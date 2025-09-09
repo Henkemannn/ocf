@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="sv">
+<html lang="no">
 <head>
   <meta charset="utf-8">
-  <title>Turnus – Admin</title>
+  <title>Turnus – Adminpanel</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 1rem 2rem; }
     h1, h2 { margin: .2rem 0; }
@@ -17,8 +17,8 @@
 </head>
 <body>
   <div class="admin-toolbar" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
-    <a href="{{ url_for('admin_home') }}" class="btn btn-light">← Till Admin</a>
-    <h1 style="margin:0;">Turnus – Admin</h1>
+    <a href="{{ url_for('admin_menu') }}" class="btn btn-light">← Tilbake til admin</a>
+    <h1 style="margin:0;">Turnus – Adminpanel</h1>
   </div>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -31,33 +31,34 @@
   {% endwith %}
 
   <form method="get" action="{{ url_for('turnus_admin_home') }}">
-    <label>Rigg-ID (valfritt)
-      <input type="number" name="rig_id" value="{{ rig_id or '' }}" placeholder="t.ex. 1">
+    <label>Rigg-ID (valgfritt)
+      <input type="number" name="rig_id" value="{{ rig_id or '' }}" placeholder="f.eks. 1">
     </label>
-    <button type="submit">Filtrera</button>
+    <button type="submit">Filtrer</button>
   </form>
 
   <div class="grid">
     <!-- Templates -->
     <div class="card">
-      <h2>Templates</h2>
-
-      <h3>Skapa ny</h3>
+      <h2>Maler</h2>
+      <span title="En mal definerer rotasjonen for kockene. Du kan opprette, endre eller aktivere en mal. Info: Rotasjonen følger dagkock → hjem, nattkock → dagkock, ny nattkock hver uke.">ℹ️</span>
+      <h3>Opprett ny mal</h3>
       <form method="post" action="{{ url_for('turnus_template_create') }}">
-        <label>Namn <input name="name" required></label>
-        <label>Rigg-ID (valfritt) <input name="rig_id" type="number" value="{{ rig_id or '' }}"></label>
-        <label>Pattern JSON <textarea name="pattern_json" rows="6" class="mono" required>{
+        <label>Navn <input name="name" required></label>
+        <label>Rigg-ID (valgfritt) <input name="rig_id" type="number" value="{{ rig_id or '' }}"></label>
+        <label>Rotasjonsmønster (JSON)<textarea name="pattern_json" rows="6" class="mono" required>{
   "weekly": [
-    {"weekday": 0, "start": "07:00", "end": "19:00", "role": "dag"}
+    {"weekday": 0, "start": "07:00", "end": "19:00", "role": "dag"},
+    {"weekday": 0, "start": "19:00", "end": "07:00", "role": "natt"}
   ]
 }</textarea></label>
-        <button type="submit">Skapa template</button>
+        <button type="submit">Opprett mal</button>
       </form>
 
       <hr>
-      <h3>Befintliga</h3>
+      <h3>Eksisterende maler</h3>
       {% if not templates %}
-        <p class="muted">Inga templates ännu.</p>
+        <p class="muted">Ingen maler enda.</p>
       {% else %}
         {% for t in templates %}
           <details>
@@ -91,21 +92,21 @@
 
     <!-- Slots -->
     <div class="card">
-      <h2>Slots</h2>
-
-      <h3>Generera från template</h3>
+      <h2>Turnus-slots</h2>
+      <span title="En slot er en arbeidsperiode for en kock. Generer slots fra en mal for å planlegge rotasjonen. Virtuell kock kan brukes for vikar/byte.">ℹ️</span>
+      <h3>Generer fra mal</h3>
       <form method="post" action="{{ url_for('turnus_slots_generate') }}">
-  <label>Template ID <input name="template_id" type="number" required></label>
-  <label>Rigg-ID <input name="rig_id" type="number" value="{{ rig_id or '' }}" required></label>
-  <label>Startdatum <input name="start_date" type="date" required></label>
-  <label>Slutdatum <input name="end_date" type="date" required></label>
-        <button type="submit">Generera slots</button>
+        <label>Mal-ID <input name="template_id" type="number" required></label>
+        <label>Rigg-ID <input name="rig_id" type="number" value="{{ rig_id or '' }}" required></label>
+        <label>Startdato <input name="start_date" type="date" required></label>
+        <label>Sluttdato <input name="end_date" type="date" required></label>
+        <button type="submit">Generer slots</button>
       </form>
 
       <hr>
-      <h3>Senaste slots (max 200)</h3>
+      <h3>Siste slots (maks 200)</h3>
       {% if not slots %}
-        <p class="muted">Inga slots skapade ännu.</p>
+        <p class="muted">Ingen slots opprettet enda.</p>
       {% else %}
         <div class="mb-2">
           <button type="button" id="markAll" class="btn btn-sm btn-secondary">Markera alla</button>
@@ -177,26 +178,30 @@
       {% endif %}
 
       <hr>
-      <h3>Bind/Unbind användare</h3>
+      <h3>Koble/Frakoble kock</h3>
+      <span title="Koble en kock til en slot. Bruk virtuell kock for vikar/byte. Frakoble for å fjerne kock fra slot.">ℹ️</span>
       <form method="post" action="{{ url_for('turnus_bind') }}">
         <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
-        <label>Slot ID <input name="slot_id" type="number" required></label>
-        <label>Kock/User
+        <label>Slot-ID <input name="slot_id" type="number" required></label>
+        <label>Kock/Bruker
           <select name="user_id" required>
-            <option value="" disabled selected>Välj kock...</option>
+            <option value="" disabled selected>Velg kock...</option>
             {% for u in users %}
               <option value="{{ u.id }}">{{ u.name }} (id: {{ u.id }})</option>
             {% endfor %}
+            {% for i in range(1,7) %}
+              <option value="virt{{i}}">Virtuell kock #{{i}}</option>
+            {% endfor %}
           </select>
         </label>
-        <label>Notes <input name="notes"></label>
-        <button type="submit">Bind</button>
+        <label>Notater <input name="notes"></label>
+        <button type="submit">Koble</button>
       </form>
 
       <form method="post" action="{{ url_for('turnus_unbind') }}" style="margin-top:.5rem">
         <input type="hidden" name="rig_id" value="{{ rig_id or '' }}">
-        <label>Slot ID <input name="slot_id" type="number" required></label>
-        <button type="submit">Unbind</button>
+        <label>Slot-ID <input name="slot_id" type="number" required></label>
+        <button type="submit">Frakoble</button>
       </form>
     </div>
   </div>

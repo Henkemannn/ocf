@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width:400px">
+  <h2 class="mb-4 text-center">Superuser login</h2>
+  <form method="post">
+    <div class="mb-3">
+      <label for="code" class="form-label">Superuser-kode</label>
+      <input type="password" class="form-control" id="code" name="code" required autofocus>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Logg inn</button>
+  </form>
+</div>
+{% endblock %}

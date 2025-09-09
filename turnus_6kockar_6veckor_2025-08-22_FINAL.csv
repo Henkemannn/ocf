@@ -1,0 +1,300 @@
+date,weekday,week_in_cycle,cook,shift,start_time,end_time,special,notes
+2025-08-22,Fredag,1,Kock 1,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-08-22,Fredag,1,Kock 1,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-08-22,Fredag,1,Kock 2,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-08-22,Fredag,1,Kock 3,ledig,,,,
+2025-08-22,Fredag,1,Kock 4,ledig,,,,
+2025-08-22,Fredag,1,Kock 5,ledig,,,,
+2025-08-22,Fredag,1,Kock 6,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-08-23,Lördag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-23,Lördag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-23,Lördag,1,Kock 2,dag,07:00,19:00,,
+2025-08-23,Lördag,1,Kock 3,ledig,,,,
+2025-08-23,Lördag,1,Kock 4,ledig,,,,
+2025-08-23,Lördag,1,Kock 5,ledig,,,,
+2025-08-23,Lördag,1,Kock 6,ledig,,,,
+2025-08-24,Söndag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-24,Söndag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-24,Söndag,1,Kock 2,dag,07:00,19:00,,
+2025-08-24,Söndag,1,Kock 3,ledig,,,,
+2025-08-24,Söndag,1,Kock 4,ledig,,,,
+2025-08-24,Söndag,1,Kock 5,ledig,,,,
+2025-08-24,Söndag,1,Kock 6,ledig,,,,
+2025-08-25,Måndag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-25,Måndag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-25,Måndag,1,Kock 2,dag,07:00,19:00,,
+2025-08-25,Måndag,1,Kock 3,ledig,,,,
+2025-08-25,Måndag,1,Kock 4,ledig,,,,
+2025-08-25,Måndag,1,Kock 5,ledig,,,,
+2025-08-25,Måndag,1,Kock 6,ledig,,,,
+2025-08-26,Tisdag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-26,Tisdag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-26,Tisdag,1,Kock 2,dag,07:00,19:00,,
+2025-08-26,Tisdag,1,Kock 3,ledig,,,,
+2025-08-26,Tisdag,1,Kock 4,ledig,,,,
+2025-08-26,Tisdag,1,Kock 5,ledig,,,,
+2025-08-26,Tisdag,1,Kock 6,ledig,,,,
+2025-08-27,Onsdag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-27,Onsdag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-27,Onsdag,1,Kock 2,dag,07:00,19:00,,
+2025-08-27,Onsdag,1,Kock 3,ledig,,,,
+2025-08-27,Onsdag,1,Kock 4,ledig,,,,
+2025-08-27,Onsdag,1,Kock 5,ledig,,,,
+2025-08-27,Onsdag,1,Kock 6,ledig,,,,
+2025-08-28,Torsdag,1,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-28,Torsdag,1,Kock 1,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-28,Torsdag,1,Kock 2,dag,07:00,19:00,,
+2025-08-28,Torsdag,1,Kock 3,ledig,,,,
+2025-08-28,Torsdag,1,Kock 4,ledig,,,,
+2025-08-28,Torsdag,1,Kock 5,ledig,,,,
+2025-08-28,Torsdag,1,Kock 6,ledig,,,,
+2025-08-29,Fredag,2,Kock 1,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-29,Fredag,2,Kock 1,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-08-29,Fredag,2,Kock 2,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-08-29,Fredag,2,Kock 3,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-08-29,Fredag,2,Kock 3,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-08-29,Fredag,2,Kock 4,ledig,,,,
+2025-08-29,Fredag,2,Kock 5,ledig,,,,
+2025-08-29,Fredag,2,Kock 6,ledig,,,,
+2025-08-30,Lördag,2,Kock 1,dag,07:00,19:00,,
+2025-08-30,Lördag,2,Kock 2,ledig,,,,
+2025-08-30,Lördag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-30,Lördag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-30,Lördag,2,Kock 4,ledig,,,,
+2025-08-30,Lördag,2,Kock 5,ledig,,,,
+2025-08-30,Lördag,2,Kock 6,ledig,,,,
+2025-08-31,Söndag,2,Kock 1,dag,07:00,19:00,,
+2025-08-31,Söndag,2,Kock 2,ledig,,,,
+2025-08-31,Söndag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-08-31,Söndag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-08-31,Söndag,2,Kock 4,ledig,,,,
+2025-08-31,Söndag,2,Kock 5,ledig,,,,
+2025-08-31,Söndag,2,Kock 6,ledig,,,,
+2025-09-01,Måndag,2,Kock 1,dag,07:00,19:00,,
+2025-09-01,Måndag,2,Kock 2,ledig,,,,
+2025-09-01,Måndag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-01,Måndag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-01,Måndag,2,Kock 4,ledig,,,,
+2025-09-01,Måndag,2,Kock 5,ledig,,,,
+2025-09-01,Måndag,2,Kock 6,ledig,,,,
+2025-09-02,Tisdag,2,Kock 1,dag,07:00,19:00,,
+2025-09-02,Tisdag,2,Kock 2,ledig,,,,
+2025-09-02,Tisdag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-02,Tisdag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-02,Tisdag,2,Kock 4,ledig,,,,
+2025-09-02,Tisdag,2,Kock 5,ledig,,,,
+2025-09-02,Tisdag,2,Kock 6,ledig,,,,
+2025-09-03,Onsdag,2,Kock 1,dag,07:00,19:00,,
+2025-09-03,Onsdag,2,Kock 2,ledig,,,,
+2025-09-03,Onsdag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-03,Onsdag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-03,Onsdag,2,Kock 4,ledig,,,,
+2025-09-03,Onsdag,2,Kock 5,ledig,,,,
+2025-09-03,Onsdag,2,Kock 6,ledig,,,,
+2025-09-04,Torsdag,2,Kock 1,dag,07:00,19:00,,
+2025-09-04,Torsdag,2,Kock 2,ledig,,,,
+2025-09-04,Torsdag,2,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-04,Torsdag,2,Kock 3,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-04,Torsdag,2,Kock 4,ledig,,,,
+2025-09-04,Torsdag,2,Kock 5,ledig,,,,
+2025-09-04,Torsdag,2,Kock 6,ledig,,,,
+2025-09-05,Fredag,3,Kock 1,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-09-05,Fredag,3,Kock 2,ledig,,,,
+2025-09-05,Fredag,3,Kock 3,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-05,Fredag,3,Kock 3,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-09-05,Fredag,3,Kock 4,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-09-05,Fredag,3,Kock 4,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-09-05,Fredag,3,Kock 5,ledig,,,,
+2025-09-05,Fredag,3,Kock 6,ledig,,,,
+2025-09-06,Lördag,3,Kock 1,ledig,,,,
+2025-09-06,Lördag,3,Kock 2,ledig,,,,
+2025-09-06,Lördag,3,Kock 3,dag,07:00,19:00,,
+2025-09-06,Lördag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-06,Lördag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-06,Lördag,3,Kock 5,ledig,,,,
+2025-09-06,Lördag,3,Kock 6,ledig,,,,
+2025-09-07,Söndag,3,Kock 1,ledig,,,,
+2025-09-07,Söndag,3,Kock 2,ledig,,,,
+2025-09-07,Söndag,3,Kock 3,dag,07:00,19:00,,
+2025-09-07,Söndag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-07,Söndag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-07,Söndag,3,Kock 5,ledig,,,,
+2025-09-07,Söndag,3,Kock 6,ledig,,,,
+2025-09-08,Måndag,3,Kock 1,ledig,,,,
+2025-09-08,Måndag,3,Kock 2,ledig,,,,
+2025-09-08,Måndag,3,Kock 3,dag,07:00,19:00,,
+2025-09-08,Måndag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-08,Måndag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-08,Måndag,3,Kock 5,ledig,,,,
+2025-09-08,Måndag,3,Kock 6,ledig,,,,
+2025-09-09,Tisdag,3,Kock 1,ledig,,,,
+2025-09-09,Tisdag,3,Kock 2,ledig,,,,
+2025-09-09,Tisdag,3,Kock 3,dag,07:00,19:00,,
+2025-09-09,Tisdag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-09,Tisdag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-09,Tisdag,3,Kock 5,ledig,,,,
+2025-09-09,Tisdag,3,Kock 6,ledig,,,,
+2025-09-10,Onsdag,3,Kock 1,ledig,,,,
+2025-09-10,Onsdag,3,Kock 2,ledig,,,,
+2025-09-10,Onsdag,3,Kock 3,dag,07:00,19:00,,
+2025-09-10,Onsdag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-10,Onsdag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-10,Onsdag,3,Kock 5,ledig,,,,
+2025-09-10,Onsdag,3,Kock 6,ledig,,,,
+2025-09-11,Torsdag,3,Kock 1,ledig,,,,
+2025-09-11,Torsdag,3,Kock 2,ledig,,,,
+2025-09-11,Torsdag,3,Kock 3,dag,07:00,19:00,,
+2025-09-11,Torsdag,3,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-11,Torsdag,3,Kock 4,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-11,Torsdag,3,Kock 5,ledig,,,,
+2025-09-11,Torsdag,3,Kock 6,ledig,,,,
+2025-09-12,Fredag,4,Kock 1,ledig,,,,
+2025-09-12,Fredag,4,Kock 2,ledig,,,,
+2025-09-12,Fredag,4,Kock 3,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-09-12,Fredag,4,Kock 4,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-12,Fredag,4,Kock 4,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-09-12,Fredag,4,Kock 5,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-09-12,Fredag,4,Kock 5,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-09-12,Fredag,4,Kock 6,ledig,,,,
+2025-09-13,Lördag,4,Kock 1,ledig,,,,
+2025-09-13,Lördag,4,Kock 2,ledig,,,,
+2025-09-13,Lördag,4,Kock 3,ledig,,,,
+2025-09-13,Lördag,4,Kock 4,dag,07:00,19:00,,
+2025-09-13,Lördag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-13,Lördag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-13,Lördag,4,Kock 6,ledig,,,,
+2025-09-14,Söndag,4,Kock 1,ledig,,,,
+2025-09-14,Söndag,4,Kock 2,ledig,,,,
+2025-09-14,Söndag,4,Kock 3,ledig,,,,
+2025-09-14,Söndag,4,Kock 4,dag,07:00,19:00,,
+2025-09-14,Söndag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-14,Söndag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-14,Söndag,4,Kock 6,ledig,,,,
+2025-09-15,Måndag,4,Kock 1,ledig,,,,
+2025-09-15,Måndag,4,Kock 2,ledig,,,,
+2025-09-15,Måndag,4,Kock 3,ledig,,,,
+2025-09-15,Måndag,4,Kock 4,dag,07:00,19:00,,
+2025-09-15,Måndag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-15,Måndag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-15,Måndag,4,Kock 6,ledig,,,,
+2025-09-16,Tisdag,4,Kock 1,ledig,,,,
+2025-09-16,Tisdag,4,Kock 2,ledig,,,,
+2025-09-16,Tisdag,4,Kock 3,ledig,,,,
+2025-09-16,Tisdag,4,Kock 4,dag,07:00,19:00,,
+2025-09-16,Tisdag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-16,Tisdag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-16,Tisdag,4,Kock 6,ledig,,,,
+2025-09-17,Onsdag,4,Kock 1,ledig,,,,
+2025-09-17,Onsdag,4,Kock 2,ledig,,,,
+2025-09-17,Onsdag,4,Kock 3,ledig,,,,
+2025-09-17,Onsdag,4,Kock 4,dag,07:00,19:00,,
+2025-09-17,Onsdag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-17,Onsdag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-17,Onsdag,4,Kock 6,ledig,,,,
+2025-09-18,Torsdag,4,Kock 1,ledig,,,,
+2025-09-18,Torsdag,4,Kock 2,ledig,,,,
+2025-09-18,Torsdag,4,Kock 3,ledig,,,,
+2025-09-18,Torsdag,4,Kock 4,dag,07:00,19:00,,
+2025-09-18,Torsdag,4,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-18,Torsdag,4,Kock 5,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-18,Torsdag,4,Kock 6,ledig,,,,
+2025-09-19,Fredag,5,Kock 1,ledig,,,,
+2025-09-19,Fredag,5,Kock 2,ledig,,,,
+2025-09-19,Fredag,5,Kock 3,ledig,,,,
+2025-09-19,Fredag,5,Kock 4,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-09-19,Fredag,5,Kock 5,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-19,Fredag,5,Kock 5,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-09-19,Fredag,5,Kock 6,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-09-19,Fredag,5,Kock 6,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-09-20,Lördag,5,Kock 1,ledig,,,,
+2025-09-20,Lördag,5,Kock 2,ledig,,,,
+2025-09-20,Lördag,5,Kock 3,ledig,,,,
+2025-09-20,Lördag,5,Kock 4,ledig,,,,
+2025-09-20,Lördag,5,Kock 5,dag,07:00,19:00,,
+2025-09-20,Lördag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-20,Lördag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-21,Söndag,5,Kock 1,ledig,,,,
+2025-09-21,Söndag,5,Kock 2,ledig,,,,
+2025-09-21,Söndag,5,Kock 3,ledig,,,,
+2025-09-21,Söndag,5,Kock 4,ledig,,,,
+2025-09-21,Söndag,5,Kock 5,dag,07:00,19:00,,
+2025-09-21,Söndag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-21,Söndag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-22,Måndag,5,Kock 1,ledig,,,,
+2025-09-22,Måndag,5,Kock 2,ledig,,,,
+2025-09-22,Måndag,5,Kock 3,ledig,,,,
+2025-09-22,Måndag,5,Kock 4,ledig,,,,
+2025-09-22,Måndag,5,Kock 5,dag,07:00,19:00,,
+2025-09-22,Måndag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-22,Måndag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-23,Tisdag,5,Kock 1,ledig,,,,
+2025-09-23,Tisdag,5,Kock 2,ledig,,,,
+2025-09-23,Tisdag,5,Kock 3,ledig,,,,
+2025-09-23,Tisdag,5,Kock 4,ledig,,,,
+2025-09-23,Tisdag,5,Kock 5,dag,07:00,19:00,,
+2025-09-23,Tisdag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-23,Tisdag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-24,Onsdag,5,Kock 1,ledig,,,,
+2025-09-24,Onsdag,5,Kock 2,ledig,,,,
+2025-09-24,Onsdag,5,Kock 3,ledig,,,,
+2025-09-24,Onsdag,5,Kock 4,ledig,,,,
+2025-09-24,Onsdag,5,Kock 5,dag,07:00,19:00,,
+2025-09-24,Onsdag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-24,Onsdag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-25,Torsdag,5,Kock 1,ledig,,,,
+2025-09-25,Torsdag,5,Kock 2,ledig,,,,
+2025-09-25,Torsdag,5,Kock 3,ledig,,,,
+2025-09-25,Torsdag,5,Kock 4,ledig,,,,
+2025-09-25,Torsdag,5,Kock 5,dag,07:00,19:00,,
+2025-09-25,Torsdag,5,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-25,Torsdag,5,Kock 6,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-26,Fredag,6,Kock 1,ledig,,,,
+2025-09-26,Fredag,6,Kock 2,dag,09:00,15:00,snu_till_natt,Ombord; vila 15–23
+2025-09-26,Fredag,6,Kock 2,natt,23:00,24:00,,Första natten (forts. 00–07 lördag)
+2025-09-26,Fredag,6,Kock 3,ledig,,,,
+2025-09-26,Fredag,6,Kock 4,ledig,,,,
+2025-09-26,Fredag,6,Kock 5,ledig,,,prepp_avfärdsdag,Fredag lunch preppad innan avmönstring. Ny kock börjar 09:00.
+2025-09-26,Fredag,6,Kock 6,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-26,Fredag,6,Kock 6,dag,15:00,23:00,snu_till_dag,Vänder till dag; dagpass startar lördag 07:00
+2025-09-27,Lördag,6,Kock 1,ledig,,,,
+2025-09-27,Lördag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-27,Lördag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-27,Lördag,6,Kock 3,ledig,,,,
+2025-09-27,Lördag,6,Kock 4,ledig,,,,
+2025-09-27,Lördag,6,Kock 5,ledig,,,,
+2025-09-27,Lördag,6,Kock 6,dag,07:00,19:00,,
+2025-09-28,Söndag,6,Kock 1,ledig,,,,
+2025-09-28,Söndag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-28,Söndag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-28,Söndag,6,Kock 3,ledig,,,,
+2025-09-28,Söndag,6,Kock 4,ledig,,,,
+2025-09-28,Söndag,6,Kock 5,ledig,,,,
+2025-09-28,Söndag,6,Kock 6,dag,07:00,19:00,,
+2025-09-29,Måndag,6,Kock 1,ledig,,,,
+2025-09-29,Måndag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-29,Måndag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-29,Måndag,6,Kock 3,ledig,,,,
+2025-09-29,Måndag,6,Kock 4,ledig,,,,
+2025-09-29,Måndag,6,Kock 5,ledig,,,,
+2025-09-29,Måndag,6,Kock 6,dag,07:00,19:00,,
+2025-09-30,Tisdag,6,Kock 1,ledig,,,,
+2025-09-30,Tisdag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-09-30,Tisdag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-09-30,Tisdag,6,Kock 3,ledig,,,,
+2025-09-30,Tisdag,6,Kock 4,ledig,,,,
+2025-09-30,Tisdag,6,Kock 5,ledig,,,,
+2025-09-30,Tisdag,6,Kock 6,dag,07:00,19:00,,
+2025-10-01,Onsdag,6,Kock 1,ledig,,,,
+2025-10-01,Onsdag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-10-01,Onsdag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-10-01,Onsdag,6,Kock 3,ledig,,,,
+2025-10-01,Onsdag,6,Kock 4,ledig,,,,
+2025-10-01,Onsdag,6,Kock 5,ledig,,,,
+2025-10-01,Onsdag,6,Kock 6,dag,07:00,19:00,,
+2025-10-02,Torsdag,6,Kock 1,ledig,,,,
+2025-10-02,Torsdag,6,Kock 2,natt,00:00,07:00,,Natt (forts. från föregående dag)
+2025-10-02,Torsdag,6,Kock 2,natt,19:00,24:00,,Natt (forts. 00–07 nästa dag)
+2025-10-02,Torsdag,6,Kock 3,ledig,,,,
+2025-10-02,Torsdag,6,Kock 4,ledig,,,,
+2025-10-02,Torsdag,6,Kock 5,ledig,,,,
+2025-10-02,Torsdag,6,Kock 6,dag,07:00,19:00,,

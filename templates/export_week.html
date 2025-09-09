@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <title>Veckoplanering - Utskrift</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 17px; margin: 0; padding: 0; background: #fff; }
+    .container { max-width: 900px; margin: 0 auto; padding: 2em 1em; }
+    h1, h2, h3 { margin-top: 0; }
+    .day-block { border-bottom: 1px solid #ccc; margin-bottom: 2em; padding-bottom: 1em; }
+    .meal { margin-bottom: 1em; }
+    .meal-title { font-weight: bold; font-size: 1.1em; }
+    .label { font-weight: bold; color: #333; }
+    .notes { color: #444; font-style: italic; }
+    @media print {
+      .no-print { display: none; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="no-print" style="text-align:right; margin-bottom:1em;">
+    <button onclick="window.print()" style="font-size:1em; padding:0.5em 1.2em;">Skriv ut</button>
+    <a href="javascript:window.close()" style="margin-left:1em;">Stäng</a>
+  </div>
+  <h1>Veckoplanering</h1>
+  <h3>Tur: start {{ wc.start_friday }}</h3>
+  {% for d, items in grouped.items() %}
+  <div class="day-block">
+    <h2>{{ d }}</h2>
+    {% for it in items %}
+    <div class="meal">
+      <div class="meal-title">{{ it.meal_type|capitalize }}: {{ it.dish_name or '—' }}</div>
+      <div><span class="label">Meny:</span> {{ it.menu_index }}</div>
+      {% if it.prepp %}<div><span class="label">Prepp:</span> {{ it.prepp }}</div>{% endif %}
+      {% if it.recept %}<div><span class="label">Recept:</span> {{ it.recept }}</div>{% endif %}
+      {% if it.frysplock %}<div><span class="label">Frysplock:</span> {{ it.frysplock }}</div>{% endif %}
+      {% if it.extra_notes %}<div class="notes">{{ it.extra_notes }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+</body>
+</html>

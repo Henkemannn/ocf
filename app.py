@@ -1,20 +1,4 @@
 from sqlite3 import connect
-
-@app.get("/turnus/admin")
-def turnus_admin_home():
-    rig_id = request.args.get("rig_id", type=int)
-    templates = rotation.list_templates(rig_id=rig_id) if rig_id else rotation.list_templates()
-    slots = rotation.list_slots(rig_id=rig_id) if rig_id else rotation.list_slots()
-    if len(slots) > 200:
-        slots = slots[-200:]
-
-    conn = connect("app.db")
-    conn.row_factory = rotation.sqlite3.Row
-    users = conn.execute("SELECT id, name FROM users ORDER BY name").fetchall()
-    conn.close()
-
-    return render_template("turnus_admin.html",
-                           templates=templates, slots=slots, rig_id=rig_id, users=users)
 def get_dagvecka_dates(start_date):
     """Returnerar lista med datum för dagvecka: fredag efter startdatum till fredag veckan därpå (8 dagar)."""
     # Hitta första fredag efter startdatum
@@ -78,35 +62,24 @@ def init_db():
 
 
 
-# 1. Alla imports
-import os
-import sys
-import io
-import re
-import sqlite3
-from datetime import date, datetime, timedelta
-from pathlib import Path
-from flask import Flask, render_template, request, redirect, url_for, session, g, flash
-from flask_mail import Mail, Message
-from werkzeug.security import generate_password_hash, check_password_hash
-try:
-    from docx import Document
-except ImportError:
-    Document = None
-try:
-    import PyPDF2
-except ImportError:
-    PyPDF2 = None
+
+from sqlite3 import connect
+from flask import Flask
+
+app = Flask(__name__)
 
 # --- TURNUS ENDPOINTS (Steg 6) ---
 from flask import request, jsonify
 import rotation
 from datetime import datetime
 
-# --- /TURNUS ENDPOINTS (Steg 6) ---
+from flask import session, g
+from flask_mail import Mail, Message
+import os
+import sqlite3
+from datetime import date, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
 
-# 2. App-init och variabler
-app = Flask(__name__)
 app.secret_key = 'byt-ut-denna-till-nagot-unikt-och-hemligt-2025!'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -116,6 +89,7 @@ app.config['MAIL_DEFAULT_SENDER'] = 'henrikjonsson031@gmail.com'
 app.config['MAIL_PASSWORD'] = 'dwsi pmkt ises bxdi'
 mail = Mail(app)
 UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # --- TURNUS ENDPOINTS (Steg 6) ---

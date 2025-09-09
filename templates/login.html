@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-lg border-0 p-4 w-100" style="max-width: 400px;">
+    <div class="card-body">
+      <div class="mb-4 text-center">
+        <div style="font-size:2.2em; font-weight:800; letter-spacing:1px; color:#0d6efd;">OCP</div>
+        <div style="font-size:1.1em; font-weight:500; color:#333; letter-spacing:0.5px;">Offshore Chef Planner</div>
+      </div>
+      <h1 class="card-title mb-4 text-center" style="font-weight:700; letter-spacing:0.5px;">Logg inn</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center py-2">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <form method="post" class="d-flex flex-column gap-3">
+        <div>
+          <label class="form-label">E-postadresse</label>
+          <input name="email" type="email" class="form-control form-control-lg" placeholder="navn@eksempel.no" required autofocus>
+        </div>
+        <div>
+          <label class="form-label">Passord</label>
+          <input name="password" type="password" class="form-control form-control-lg" placeholder="••••••••" required>
+        </div>
+        <button class="btn btn-primary btn-lg mt-2" style="font-weight:600; letter-spacing:0.5px;">Logg inn</button>
+        <a href="{{ url_for('admin_login') }}" class="btn btn-outline-danger btn-lg mt-2" style="font-weight:600; letter-spacing:0.5px;">Admin</a>
+        <div class="d-flex flex-column gap-1 mt-2">
+          <a class="btn btn-link text-center" href="{{ url_for('register') }}">Opprett konto</a>
+          <a class="btn btn-link text-center text-secondary" href="#">Glemt passord?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
