@@ -16,6 +16,27 @@
   </style>
 </head>
 <body>
+  <div class="card" style="margin-bottom:2rem;">
+  <h2>Generer turnus for 6 kokker</h2>
+  <form method="post" action="{{ url_for('turnus_generate_6cooks') }}">
+    <label for="start_date">Startdato for første kokk
+      <input type="date" name="start_date" id="start_date" required>
+    </label>
+    <button type="submit">Generer turnus</button>
+  </form>
+  <div style="margin-top:1rem;">
+    <strong>Virtuelle kokker:</strong>
+    <ul>
+      <li>Kokk 1 (virtuell)</li>
+      <li>Kokk 2 (virtuell)</li>
+      <li>Kokk 3 (virtuell)</li>
+      <li>Kokk 4 (virtuell)</li>
+      <li>Kokk 5 (virtuell)</li>
+      <li>Kokk 6 (virtuell)</li>
+    </ul>
+    <span class="muted">Du kan senere koble en virkelig person til hver virtuell kokk.</span>
+  </div>
+</div>
   <div class="admin-toolbar" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
     <a href="{{ url_for('admin_menu') }}" class="btn btn-light">← Tilbake til admin</a>
     <h1 style="margin:0;">Turnus – Adminpanel</h1>
