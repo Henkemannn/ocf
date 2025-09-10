@@ -4,6 +4,20 @@
   <meta charset="utf-8">
   <title>Turnus – Adminpanel</title>
   <style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #f8fafc; }
+  .modern-panel { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px #0001; padding: 2rem; }
+  .panel-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .panel-header h1 { font-size: 2rem; font-weight: 700; color: #222; margin: 0; }
+  .panel-content { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .card { border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; background: #f9f9f9; box-shadow: 0 1px 4px #0001; margin-bottom: 1.5rem; }
+  label { display:block; margin-top:.4rem; font-weight:500; }
+  input, textarea, select { width: 100%; padding:.4rem; margin-top:.2rem; border-radius:6px; border:1px solid #ccc; }
+  .muted { color:#666; font-size: .95rem; }
+  .chef-avatar { box-shadow: 0 1px 4px #0001; }
+  button { transition: background .2s; }
+  button:hover { background:#0056b3 !important; }
+</style>
+    {#
     body { font-family: system-ui, sans-serif; margin: 1rem 2rem; }
     h1, h2 { margin: .2rem 0; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
@@ -14,8 +28,52 @@
     ul { margin: .3rem 0 .8rem 1.2rem; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   </style>
+  #}
 </head>
 <body>
+  <div class="modern-panel">
+    <div class="panel-header">
+      <img src="https://img.icons8.com/ios-filled/50/chef-hat.png" alt="Chef" style="height:40px;margin-right:1rem;vertical-align:middle;">
+      <h1 style="display:inline;vertical-align:middle;">Turnus – Adminpanel</h1>
+    </div>
+    <div class="panel-content">
+      <div class="card" style="max-width:500px;margin-bottom:2rem;">
+        <h2 style="margin-top:0;">Generer turnus for 6 kokker</h2>
+        <form method="post" action="{{ url_for('turnus_generate_6cooks') }}">
+          <label for="start_date"><b>Startdato for første kokk</b></label>
+          <input type="date" name="start_date" id="start_date" required style="margin-bottom:1rem;">
+          <button type="submit" style="background:#007bff;color:#fff;padding:.5rem 1.2rem;border:none;border-radius:6px;cursor:pointer;font-size:1rem;">Generer turnus</button>
+        </form>
+      </div>
+      <div class="card" style="max-width:500px;">
+        <h3 style="margin-top:0;">Virtuelle kokker</h3>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 1</div>
+          </div>
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 2</div>
+          </div>
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 3</div>
+          </div>
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 4</div>
+          </div>
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 5</div>
+          </div>
+          <div class="chef-avatar" style="background:#f3f3f3;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-direction:column;">
+            🧑‍🍳<div style="font-size:.9rem;">Kokk 6</div>
+          </div>
+        </div>
+        <span class="muted" style="display:block;margin-top:1rem;">Du kan senere koble en virkelig person til hver virtuell kokk.</span>
+      </div>
+    </div>
+  </div>
+</body>
+
+  {#
   <div class="card" style="margin-bottom:2rem;">
   <h2>Generer turnus for 6 kokker</h2>
   <form method="post" action="{{ url_for('turnus_generate_6cooks') }}">
@@ -50,7 +108,7 @@
       </ul>
     {% endif %}
   {% endwith %}
-
+#}
   <form method="get" action="{{ url_for('turnus_admin_home') }}">
     <label>Rigg-ID (valgfritt)
       <input type="number" name="rig_id" value="{{ rig_id or '' }}" placeholder="f.eks. 1">
@@ -60,6 +118,7 @@
 
   <div class="grid">
     <!-- Templates -->
+    {#--
     <div class="card">
       <h2>Maler</h2>
       <span title="En mal definerer rotasjonen for kockene. Du kan opprette, endre eller aktivere en mal. Info: Rotasjonen følger dagkock → hjem, nattkock → dagkock, ny nattkock hver uke.">ℹ️</span>
@@ -110,11 +169,13 @@
         {% endfor %}
       {% endif %}
     </div>
-
+    --#}
     <!-- Slots -->
+    {#
     <div class="card">
       <h2>Turnus-slots</h2>
       <span title="En slot er en arbeidsperiode for en kock. Generer slots fra en mal for å planlegge rotasjonen. Virtuell kock kan brukes for vikar/byte.">ℹ️</span>
+      <!---->
       <h3>Generer fra mal</h3>
       <form method="post" action="{{ url_for('turnus_slots_generate') }}">
         <label>Mal-ID <input name="template_id" type="number" required></label>
@@ -123,7 +184,7 @@
         <label>Sluttdato <input name="end_date" type="date" required></label>
         <button type="submit">Generer slots</button>
       </form>
-
+      <!---->
       <hr>
       <h3>Siste slots (maks 200)</h3>
       {% if not slots %}
@@ -226,5 +287,6 @@
       </form>
     </div>
   </div>
+#}
 </body>
 </html>
