@@ -1,3 +1,4 @@
+# TEST: Kommentar tillagd av Copilot (2025-09-10)
 # rotation.py
 # Ny, fristående modul för turnus-logik.
 # Använder SQLite (app.db) och tabeller som skapades i Steg 4:
